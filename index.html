@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>कन्सॉलिडेटेड फंड..</title>
-
-  <!-- Google Fonts: IBM Plex Sans & IBM Plex Sans Devanagari -->
+  <!-- Google Fonts: IBM Plex Sans Devanagari & Ubuntu -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet" />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -18,7 +16,9 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"IBM Plex Sans Devanagari"', '"IBM Plex Sans"', 'sans-serif'],
+            sans: ['"IBM Plex Sans Devanagari"', '"Ubuntu"', '"IBM Plex Sans"', 'sans-serif'],
+            ubuntu: ['"Ubuntu"', 'sans-serif'],
+            devanagari: ['"IBM Plex Sans Devanagari"', '"IBM Plex Sans"', 'sans-serif'],
           },
         },
       },
@@ -51,12 +51,57 @@
     }
 
     body {
-      font-family: 'IBM Plex Sans Devanagari', 'IBM Plex Sans', sans-serif;
+      font-family: 'IBM Plex Sans Devanagari', 'Ubuntu', 'IBM Plex Sans', sans-serif;
       background-color: var(--bg-page);
       color: var(--text-primary);
       transition: background-color 0.35s ease, color 0.35s ease;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+
+    .article-surface {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+      transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    /* Main body typography, script-specific fonts, and responsive sizing */
+    .justified-body {
+      font-family: 'IBM Plex Sans Devanagari', 'Ubuntu', 'IBM Plex Sans', sans-serif;
+      font-size: 1.175rem; /* Mobile / Smaller Screens */
+      line-height: 1.9;
+    }
+
+    @media (min-width: 769px) {
+      .justified-body {
+        font-size: 1.25rem; /* Desktop / Large Screens */
+      }
+    }
+
+    .justified-body .en-text {
+      font-family: 'Ubuntu', sans-serif;
+    }
+
+    /* Strict word-wrapping, justified alignment, and paragraph spacing */
+    .justified-body p {
+      text-align: justify;
+      text-justify: inter-word;
+      word-break: normal;
+      overflow-wrap: break-word;
+      hyphens: none;
+      -webkit-hyphens: none;
+      -ms-hyphens: none;
+      line-height: 1.9;
+      margin-bottom: 1.35rem;
+    }
+
+    .centered-divider {
+      text-align: center;
+      color: var(--text-accent);
+      letter-spacing: 0.25em;
+      user-select: none;
+      margin-bottom: 1.35rem;
     }
 
     .article-surface {
@@ -331,7 +376,7 @@
     </h1>
 
     <!-- Document Body -->
-    <article class="justified-body space-y-5 sm:space-y-6 text-base sm:text-[1.08rem] md:text-[1.125rem] font-normal">
+    <article class="justified-body font-normal">
 
       <p>
         आपल्या सर्वांचा रोजच्या जीवनात ‘पैसा’ या संपूर्णतः मानवनिर्मित संकल्पनेशी सतत संबंध येतो. आधुनिक जीवनशैलीचा पैसा हा अविभाज्य भाग आहे. रोजच्या व्यवहारात म्हणजे व्यापक अर्थव्यवस्थेत त्याची देवाणघेवाण होत राहून तो खेळता नसेल तर सर्वच जग ठप्प होऊन जाईल.
@@ -342,31 +387,31 @@
       </p>
 
       <p>
-        त्यासाठी एक व्यवस्था आहे - Consolidated Fund - राष्ट्रीय गंगाजळी.
+        त्यासाठी एक व्यवस्था आहे - <span class="en-text">Consolidated Fund</span> - राष्ट्रीय गंगाजळी.
       </p>
 
-      <div class="centered-divider py-2 text-lg sm:text-xl" aria-hidden="true">⏣⏣⏣</div>
+      <div class="centered-divider py-1 text-lg sm:text-xl" aria-hidden="true">⏣⏣⏣</div>
 
       <p>
         सरकारकडे जमा होणारे सर्व कर, इतर उत्पन्न, उभारलेली कर्जे आणि सरकार करत असलेला खर्च ही सर्व उलाढाल त्या ‘कन्सॉलिडेटेड फंडा’तून होते अशी कायदेशीर संकल्पना आहे. रोजच्या उलाढालीसाठी सोय म्हणून विविध सरकारी विभागांची बँक खाती जरी स्टेट बँकेच्या किंवा रिझर्व्ह बँकेच्या शाखांत असली तरी ती त्या व्यापक राष्ट्रीय गंगाजळीचा एक भाग असतात.
       </p>
 
       <p>
-        या कन्सॉलिडेटेड फंडातून केला जाणारा सर्व व्यवहार दरवर्षी appropriation bill म्हणजेच वित्त-विनियोग विधेयकाद्वारे नियंत्रित केला जातो. हा जमाखर्च आणि भविष्यातील उत्पन्न-खर्चाचा ताळेबंद सरकार अर्थसंकल्पाद्वारे जनतेसमोर मांडत असते. सत्ताधारी पक्षाकडे बहुमत असेल तरच असे विधेयक मंजूर होते. सरकारकडून केला जाणारा खर्च जितका योग्य आणि विचारपूर्वक तितकी शिल्लक/बचत अधिक आणि पर्यायाने देशाच्या अर्थव्यवस्थेची स्थिती मजबूत हे ओघाने आलेच.
+        या कन्सॉलिडेटेड फंडातून केला जाणारा सर्व व्यवहार दरवर्षी <span class="en-text">appropriation bill</span> म्हणजेच वित्त-विनियोग विधेयकाद्वारे नियंत्रित केला जातो. हा जमाखर्च आणि भविष्यातील उत्पन्न-खर्चाचा ताळेबंद सरकार अर्थसंकल्पाद्वारे जनतेसमोर मांडत असते. सत्ताधारी पक्षाकडे बहुमत असेल तरच असे विधेयक मंजूर होते. सरकारकडून केला जाणारा खर्च जितका योग्य आणि विचारपूर्वक तितकी शिल्लक/बचत अधिक आणि पर्यायाने देशाच्या अर्थव्यवस्थेची स्थिती मजबूत हे ओघाने आलेच.
       </p>
 
       <p>
         परंतु असे असले तरी देशाचे व नागरिकांचे स्वातंत्र्य, सर्वभौमता आणि एकजूट अक्षय रहावी म्हणून करावे लागणारे काही अत्यावश्यक खर्च, उदाहरणार्थ राष्ट्रपती, न्यायाधीश यांचे पगार व इतर काही बाबतीत करावा लागणारा नित्य खर्च यावर कोणा एकाचे वर्चस्व राहू नये म्हणून त्यासाठी लागणारा पैसा आपोआप कन्सॉलिडेटेड फंडातून येत राहील अशही तरतूद घटनेत करून ठेवलेली आहे.
       </p>
 
-      <div class="centered-divider py-2 text-lg sm:text-xl" aria-hidden="true">⏣⏣⏣</div>
+      <div class="centered-divider py-1 text-lg sm:text-xl" aria-hidden="true">⏣⏣⏣</div>
 
       <p>
         आपल्या सर्वांच्या स्वतःशी आणि इतरांशी असलेल्या संबंधांचे अर्थात ‘मनोव्यापार’व्यवस्थेचे असेच काहीसे असते.
       </p>
 
       <p>
-        अशी कल्पना करूया की सगळी विश्वव्यापी शक्ती, मग कोणी त्याला देव म्हणेल, कोणी निसर्ग, ऊर्जा किंवा आणखी काही म्हणजे वैश्विक ऊर्जेचे एक अक्षयपात्र किंवा Consolidated Energy Fund आहे. आपल्या प्रत्येकाला, किंबहुना निसर्गातील सर्व सजीव आणि निर्जीवांना अस्तित्वासाठी आणि रोजच्या जगण्यासाठी लागणारी आवश्यक ती ऊर्जा या फंडातून येत असते. म्हणजे हा ऊर्जा-फंड नसेल तर अस्तित्व शून्य!
+        अशी कल्पना करूया की सगळी विश्वव्यापी शक्ती, मग कोणी त्याला देव म्हणेल, कोणी निसर्ग, ऊर्जा किंवा आणखी काही म्हणजे वैश्विक ऊर्जेचे एक अक्षयपात्र किंवा <span class="en-text">Consolidated Energy Fund</span> आहे. आपल्या प्रत्येकाला, किंबहुना निसर्गातील सर्व सजीव आणि निर्जीवांना अस्तित्वासाठी आणि रोजच्या जगण्यासाठी लागणारी आवश्यक ती ऊर्जा या फंडातून येत असते. म्हणजे हा ऊर्जा-फंड नसेल तर अस्तित्व शून्य!
       </p>
 
       <p>
@@ -378,24 +423,24 @@
       </p>
 
       <p>
-        सकाळी उठल्यावर वर्तमानात जे काही आहे त्याबद्दल मनोमन कृतज्ञता व्यक्त करणे, दिवसभरात नित्यकर्मे आणि इतर गोष्टी करताना मानसिक आणि शारीरिक उर्जेचा वापर भानावर राहून करणे आणि दिवसअखेरीस आत्मनिरीक्षण करून त्या दिवसातील बऱ्यावाईट अनुभवांचे संचित जाणीवपूर्वक त्या अक्षय उर्जेस परत करणे म्हणजे पार पडलेल्या आणि येणाऱ्या नवीन दिनक्रमासाठी एक ऊर्जा-विनियोग विधेयक (energy appropriation bill) आपली आपल्याशी साधक-बाधक चर्चा करून रोजच्यारोज मन-संसदेत पास करून घेण्यासारखे आहे.
+        सकाळी उठल्यावर वर्तमानात जे काही आहे त्याबद्दल मनोमन कृतज्ञता व्यक्त करणे, दिवसभरात नित्यकर्मे आणि इतर गोष्टी करताना मानसिक आणि शारीरिक उर्जेचा वापर भानावर राहून करणे आणि दिवसअखेरीस आत्मनिरीक्षण करून त्या दिवसातील बऱ्यावाईट अनुभवांचे संचित जाणीवपूर्वक त्या अक्षय उर्जेस परत करणे म्हणजे पार पडलेल्या आणि येणाऱ्या नवीन दिनक्रमासाठी एक ऊर्जा-विनियोग विधेयक (<span class="en-text">energy appropriation bill</span>) आपली आपल्याशी साधक-बाधक चर्चा करून रोजच्यारोज मन-संसदेत पास करून घेण्यासारखे आहे.
       </p>
 
       <p>
-        निकोप सवयींचा अंगिकार, नियमित साधना आणि मनःपूर्वक बाळगलेला कृतज्ञततेचा भाव हा ‘तीन ओळींचा पक्षादेश’ (three-line whip) म्हणजे मन-संसदेतील निर्विवाद बहुमताची खात्री.
+        निकोप सवयींचा अंगिकार, नियमित साधना आणि मनःपूर्वक बाळगलेला कृतज्ञततेचा भाव हा ‘तीन ओळींचा पक्षादेश’ (<span class="en-text">three-line whip</span>) म्हणजे मन-संसदेतील निर्विवाद बहुमताची खात्री.
       </p>
 
       <p>
-        <span class="italic">In a parliamentary democracy, ignoring party’s “three-line whip” invites serious consequences;</span> तद्वत, हा मन-संसदीय पक्षाचा ‘तीन सवयींचा व्हीप’ न मानण्याचे काय दुष्परिणाम होऊ शकतात याचा साधक-बाधक विचार ज्याने त्याने करून स्वहितासाठी ऊर्जा-विनियोग विधेयकावर मतदान करायचे असते.
+        <span class="en-text italic">In a parliamentary democracy, ignoring party’s “three-line whip” invites serious consequences;</span> तद्वत, हा मन-संसदीय पक्षाचा ‘तीन सवयींचा व्हीप’ न मानण्याचे काय दुष्परिणाम होऊ शकतात याचा साधक-बाधक विचार ज्याने त्याने करून स्वहितासाठी ऊर्जा-विनियोग विधेयकावर मतदान करायचे असते.
       </p>
 
-      <div class="centered-divider pt-2 pb-1 text-lg sm:text-xl" aria-hidden="true">⏣⏣⏣</div>
+      <div class="centered-divider pt-1 text-lg sm:text-xl" aria-hidden="true">⏣⏣⏣</div>
 
-      <div class="text-center italic text-base sm:text-lg tracking-wider text-slate-700 dark:text-slate-300">
+      <div class="text-center italic tracking-wider text-slate-700 dark:text-slate-300 mb-[1.35rem]">
         २०२५०६११
       </div>
 
-      <div class="centered-divider pt-1 text-lg sm:text-xl" aria-hidden="true">⏣</div>
+      <div class="centered-divider mb-0 text-lg sm:text-xl" aria-hidden="true">⏣</div>
 
     </article>
 
