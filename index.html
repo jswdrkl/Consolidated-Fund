@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="mr" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>कन्सॉलिडेटेड फंड..</title>
+
+  <!-- Google Fonts: IBM Plex Sans & IBM Plex Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"IBM Plex Sans Devanagari"', '"IBM Plex Sans"', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root {
+      --bg-page: #faf8f3;
+      --bg-card: #ffffff;
+      --text-primary: #1e293b;
+      --text-title: #0f172a;
+      --text-accent: #b45309;
+      --border-subtle: rgba(180, 83, 9, 0.14);
+      --shadow-card: 0 18px 45px -15px rgba(15, 23, 42, 0.07), 0 4px 16px -4px rgba(180, 83, 9, 0.05);
+    }
+
+    html.dark {
+      --bg-page: #0f172a;
+      --bg-card: #162033;
+      --text-primary: #e2e8f0;
+      --text-title: #f8fafc;
+      --text-accent: #fbbf24;
+      --border-subtle: rgba(251, 191, 36, 0.16);
+      --shadow-card: 0 20px 50px -15px rgba(2, 6, 23, 0.65), 0 4px 20px -4px rgba(0, 0, 0, 0.4);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Devanagari', 'IBM Plex Sans', sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      transition: background-color 0.35s ease, color 0.35s ease;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .article-surface {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+      transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    /* Strict word-wrapping & justified alignment rules */
+    .justified-body p {
+      text-align: justify;
+      text-justify: inter-word;
+      word-break: normal;
+      overflow-wrap: break-word;
+      hyphens: none;
+      -webkit-hyphens: none;
+      -ms-hyphens: none;
+      line-height: 1.9;
+    }
+
+    .centered-divider {
+      text-align: center;
+      color: var(--text-accent);
+      letter-spacing: 0.25em;
+      user-select: none;
+    }
+
+    /* Animated SVG Keyframes */
+    @keyframes orbitSlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes orbitReverse {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.72; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes dashFlow {
+      to { stroke-dashoffset: -48; }
+    }
+
+    .svg-orbit-slow {
+      transform-origin: 160px 100px;
+      animation: orbitSlow 26s linear infinite;
+    }
+
+    .svg-orbit-reverse {
+      transform-origin: 160px 100px;
+      animation: orbitReverse 20s linear infinite;
+    }
+
+    .svg-pulse {
+      transform-origin: 160px 100px;
+      animation: pulseGlow 4.5s ease-in-out infinite;
+    }
+
+    .svg-float {
+      animation: floatUp 4s ease-in-out infinite;
+    }
+
+    .svg-float-delayed {
+      animation: floatUp 4.8s ease-in-out 1.2s infinite;
+    }
+
+    .svg-stream {
+      stroke-dasharray: 6 6;
+      animation: dashFlow 3s linear infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .svg-orbit-slow,
+      .svg-orbit-reverse,
+      .svg-pulse,
+      .svg-float,
+      .svg-float-delayed,
+      .svg-stream {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen w-full overflow-x-hidden py-6 px-3 sm:py-10 sm:px-6 md:px-8 flex flex-col items-center justify-center">
+
+  <!-- Top Theme Toggle (Icon-only, subtle, accessible) -->
+  <div class="w-full max-w-3xl flex justify-end mb-3 sm:mb-4">
+    <button
+      id="theme-toggle"
+      type="button"
+      aria-label="Toggle color theme"
+      class="p-2.5 rounded-full bg-white/80 dark:bg-slate-800/80 border border-amber-900/15 dark:border-amber-400/20 text-amber-800 dark:text-amber-300 shadow-sm hover:scale-105 active:scale-95 transition-all duration-200 backdrop-blur-sm"
+    >
+      <!-- Sun icon (shown in dark mode) -->
+      <svg id="icon-sun" class="w-5 h-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+      <!-- Moon icon (shown in light mode) -->
+      <svg id="icon-moon" class="w-5 h-5 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Main Document Container -->
+  <main class="article-surface w-full max-w-3xl rounded-3xl px-5 py-8 sm:px-10 sm:py-12 md:px-14 md:py-14">
+
+    <!-- Light Colorful Animated SVG Graphic Representing the Title -->
+    <div class="w-full flex justify-center mb-6 sm:mb-8">
+      <svg
+        viewBox="0 0 320 200"
+        class="w-full max-w-[290px] sm:max-w-[330px] h-auto overflow-visible"
+        role="img"
+        aria-label="कन्सॉलिडेटेड फंड.."
+      >
+        <defs>
+          <!-- Soft warm background aura -->
+          <radialGradient id="auraGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fde68a" stop-opacity="0.55" />
+            <stop offset="48%" stop-color="#99f6e4" stop-opacity="0.28" />
+            <stop offset="80%" stop-color="#fecdd3" stop-opacity="0.16" />
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+          </radialGradient>
+
+          <!-- Golden-Amber Vessel Gradient -->
+          <linearGradient id="vesselGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f59e0b" />
+            <stop offset="50%" stop-color="#fbbf24" />
+            <stop offset="100%" stop-color="#f97316" />
+          </linearGradient>
+
+          <!-- Teal-Cyan Energy Wave Gradient -->
+          <linearGradient id="tealWave" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#14b8a6" />
+            <stop offset="50%" stop-color="#38bdf8" />
+            <stop offset="100%" stop-color="#818cf8" />
+          </linearGradient>
+
+          <!-- Coral-Rose Accent Gradient -->
+          <linearGradient id="coralOrb" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fb7185" />
+            <stop offset="100%" stop-color="#f59e0b" />
+          </linearGradient>
+
+          <!-- Soft Luminous Core -->
+          <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+            <stop offset="45%" stop-color="#fde047" stop-opacity="0.85" />
+            <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.15" />
+          </radialGradient>
+        </defs>
+
+        <!-- Ambient Radial Light -->
+        <circle cx="160" cy="100" r="95" fill="url(#auraGrad)" class="svg-pulse" />
+
+        <!-- Outer Rotating Harmonic Ring -->
+        <g class="svg-orbit-slow">
+          <circle
+            cx="160"
+            cy="100"
+            r="74"
+            fill="none"
+            stroke="url(#tealWave)"
+            stroke-width="1.6"
+            stroke-dasharray="10 6 3 6"
+            opacity="0.7"
+          />
+          <circle cx="160" cy="26" r="4.5" fill="#14b8a6" />
+          <circle cx="234" cy="100" r="4" fill="#fb7185" />
+          <circle cx="160" cy="174" r="4.5" fill="#f59e0b" />
+          <circle cx="86" cy="100" r="4" fill="#6366f1" />
+        </g>
+
+        <!-- Counter-Rotating Inner Geometric Hexagonal Ring -->
+        <g class="svg-orbit-reverse">
+          <polygon
+            points="160,44 208.5,72 208.5,128 160,156 111.5,128 111.5,72"
+            fill="none"
+            stroke="url(#vesselGrad)"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+            opacity="0.75"
+          />
+          <circle cx="208.5" cy="72" r="3" fill="#fbbf24" />
+          <circle cx="111.5" cy="128" r="3" fill="#2dd4bf" />
+        </g>
+
+        <!-- Flowing Energy Inflow & Outflow Streams -->
+        <path
+          d="M 42,68 C 85,68 105,94 146,98"
+          fill="none"
+          stroke="url(#tealWave)"
+          stroke-width="2"
+          stroke-linecap="round"
+          class="svg-stream"
+          opacity="0.8"
+        />
+        <path
+          d="M 278,68 C 235,68 215,94 174,98"
+          fill="none"
+          stroke="url(#coralOrb)"
+          stroke-width="2"
+          stroke-linecap="round"
+          class="svg-stream"
+          opacity="0.8"
+        />
+        <path
+          d="M 52,134 C 92,134 112,108 148,103"
+          fill="none"
+          stroke="url(#vesselGrad)"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          class="svg-stream"
+          opacity="0.75"
+        />
+        <path
+          d="M 268,134 C 228,134 208,108 172,103"
+          fill="none"
+          stroke="url(#tealWave)"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          class="svg-stream"
+          opacity="0.75"
+        />
+
+        <!-- Central Akshayapatra / Consolidated Reservoir Vessel -->
+        <g class="svg-float">
+          <!-- Golden Bowl / Reservoir Base -->
+          <path
+            d="M 122,102 C 122,132 198,132 198,102 Z"
+            fill="url(#vesselGrad)"
+            opacity="0.92"
+          />
+          <!-- Rim of the Reservoir -->
+          <ellipse
+            cx="160"
+            cy="102"
+            rx="38"
+            ry="9"
+            fill="#fef3c7"
+            stroke="#f59e0b"
+            stroke-width="1.8"
+          />
+          <!-- Luminous Energy & Wealth Core Rising from Reservoir -->
+          <circle cx="160" cy="84" r="18" fill="url(#coreGrad)" class="svg-pulse" />
+          <circle cx="160" cy="84" r="9" fill="#fbbf24" opacity="0.9" />
+          <circle cx="160" cy="84" r="4" fill="#ffffff" />
+        </g>
+
+        <!-- Floating Energy & Coin Orbs -->
+        <g class="svg-float-delayed">
+          <circle cx="136" cy="64" r="4.5" fill="#2dd4bf" opacity="0.85" />
+          <circle cx="184" cy="62" r="5" fill="#fb7185" opacity="0.85" />
+          <circle cx="160" cy="48" r="3.5" fill="#818cf8" opacity="0.9" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Document Title -->
+    <h1 class="text-center text-2xl sm:text-3xl md:text-[2rem] font-bold tracking-tight mb-7 sm:mb-9 text-slate-900 dark:text-slate-50 leading-snug">
+      कन्सॉलिडेटेड फंड..
+    </h1>
+
+    <!-- Document Body -->
+    <article class="justified-body space-y-5 sm:space-y-6 text-base sm:text-[1.08rem] md:text-[1.125rem] font-normal">
+
+      <p>
+        आपल्या सर्वांचा रोजच्या जीवनात ‘पैसा’ या संपूर्णतः मानवनिर्मित संकल्पनेशी सतत संबंध येतो. आधुनिक जीवनशैलीचा पैसा हा अविभाज्य भाग आहे. रोजच्या व्यवहारात म्हणजे व्यापक अर्थव्यवस्थेत त्याची देवाणघेवाण होत राहून तो खेळता नसेल तर सर्वच जग ठप्प होऊन जाईल.
+      </p>
+
+      <p>
+        सर्वसामान्य नागरिक व केंद्र सरकार व राज्य सरकारे अर्थव्यवस्थेचा मोठा भाग आहेत. परंतु व्यक्ती आणि व्यवसायांची ज्याप्रमाणे बँकेत खाती असतात व त्यातून रोखीत किंवा चेक आणि इलेक्ट्रोनिक पद्धतीने व्यवहार केले जातात त्याप्रमाणे सरकारचे असे एक खाते रिझर्व्ह बँकेत नसते. सरकारचा व्याप पाहता असे काही असणे शक्यही नाहीये. मग सरकारचे आर्थिक व्यवहार चालतात तरी कसे?
+      </p>
+
+      <p>
+        त्यासाठी एक व्यवस्था आहे - Consolidated Fund - राष्ट्रीय गंगाजळी.
+      </p>
+
+      <div class="centered-divider py-2 text-lg sm:text-xl" aria-hidden="true">⏣⏣⏣</div>
+
+      <p>
+        सरकारकडे जमा होणारे सर्व कर, इतर उत्पन्न, उभारलेली कर्जे आणि सरकार करत असलेला खर्च ही सर्व उलाढाल त्या ‘कन्सॉलिडेटेड फंडा’तून होते अशी कायदेशीर संकल्पना आहे. रोजच्या उलाढालीसाठी सोय म्हणून विविध सरकारी विभागांची बँक खाती जरी स्टेट बँकेच्या किंवा रिझर्व्ह बँकेच्या शाखांत असली तरी ती त्या व्यापक राष्ट्रीय गंगाजळीचा एक भाग असतात.
+      </p>
+
+      <p>
+        या कन्सॉलिडेटेड फंडातून केला जाणारा सर्व व्यवहार दरवर्षी appropriation bill म्हणजेच वित्त-विनियोग विधेयकाद्वारे नियंत्रित केला जातो. हा जमाखर्च आणि भविष्यातील उत्पन्न-खर्चाचा ताळेबंद सरकार अर्थसंकल्पाद्वारे जनतेसमोर मांडत असते. सत्ताधारी पक्षाकडे बहुमत असेल तरच असे विधेयक मंजूर होते. सरकारकडून केला जाणारा खर्च जितका योग्य आणि विचारपूर्वक तितकी शिल्लक/बचत अधिक आणि पर्यायाने देशाच्या अर्थव्यवस्थेची स्थिती मजबूत हे ओघाने आलेच.
+      </p>
+
+      <p>
+        परंतु असे असले तरी देशाचे व नागरिकांचे स्वातंत्र्य, सर्वभौमता आणि एकजूट अक्षय रहावी म्हणून करावे लागणारे काही अत्यावश्यक खर्च, उदाहरणार्थ राष्ट्रपती, न्यायाधीश यांचे पगार व इतर काही बाबतीत करावा लागणारा नित्य खर्च यावर कोणा एकाचे वर्चस्व राहू नये म्हणून त्यासाठी लागणारा पैसा आपोआप कन्सॉलिडेटेड फंडातून येत राहील अशही तरतूद घटनेत करून ठेवलेली आहे.
+      </p>
+
+      <div class="centered-divider py-2 text-lg sm:text-xl" aria-hidden="true">⏣⏣⏣</div>
+
+      <p>
+        आपल्या सर्वांच्या स्वतःशी आणि इतरांशी असलेल्या संबंधांचे अर्थात ‘मनोव्यापार’व्यवस्थेचे असेच काहीसे असते.
+      </p>
+
+      <p>
+        अशी कल्पना करूया की सगळी विश्वव्यापी शक्ती, मग कोणी त्याला देव म्हणेल, कोणी निसर्ग, ऊर्जा किंवा आणखी काही म्हणजे वैश्विक ऊर्जेचे एक अक्षयपात्र किंवा Consolidated Energy Fund आहे. आपल्या प्रत्येकाला, किंबहुना निसर्गातील सर्व सजीव आणि निर्जीवांना अस्तित्वासाठी आणि रोजच्या जगण्यासाठी लागणारी आवश्यक ती ऊर्जा या फंडातून येत असते. म्हणजे हा ऊर्जा-फंड नसेल तर अस्तित्व शून्य!
+      </p>
+
+      <p>
+        आपण सगळे रोज जे काही करतो-वागतो-निर्मितो त्यासाठी ऊर्जा लागते. जो ऊर्जावापर आपण करतो, म्हणजे जी काही ऊर्जा खर्च करतो त्यातून जे काही बरेवाईट घडते ते देखील इथेच. म्हणजे खर्च होणारी ऊर्जा देखील त्या अक्षय ऊर्जापात्रातच राहते. तिचे रुपडे बदलत राहते; इतकेच.
+      </p>
+
+      <p>
+        अर्थसंकल्पात, मग तो देशाचा असो किंवा वैयक्तिक; केलेली तरतूद जर निगुतीने वापरली तर उपलब्ध रकमेचा सुयोग्य वापर होऊन हाती राहणारी शिल्लक अडीअडचणीस कामी येते. त्याप्रमाणे रोजच्या जीवनात प्रामुख्याने अहंकारावर मात करून कृतज्ञतेची जाणीव ठेवली तर इतर भाव-भावनांवर, वागण्या-बोलण्यावर होणारा ऊर्जा-खर्च आपसूक नियंत्रणात राहून आपल्या वाट्याला आलेल्या नैसर्गिक शक्तीचा योग्य तितका वापर होईल. मानसिक आणि शारीरिक स्वास्थ्य चांगले राहील.
+      </p>
+
+      <p>
+        सकाळी उठल्यावर वर्तमानात जे काही आहे त्याबद्दल मनोमन कृतज्ञता व्यक्त करणे, दिवसभरात नित्यकर्मे आणि इतर गोष्टी करताना मानसिक आणि शारीरिक उर्जेचा वापर भानावर राहून करणे आणि दिवसअखेरीस आत्मनिरीक्षण करून त्या दिवसातील बऱ्यावाईट अनुभवांचे संचित जाणीवपूर्वक त्या अक्षय उर्जेस परत करणे म्हणजे पार पडलेल्या आणि येणाऱ्या नवीन दिनक्रमासाठी एक ऊर्जा-विनियोग विधेयक (energy appropriation bill) आपली आपल्याशी साधक-बाधक चर्चा करून रोजच्यारोज मन-संसदेत पास करून घेण्यासारखे आहे.
+      </p>
+
+      <p>
+        निकोप सवयींचा अंगिकार, नियमित साधना आणि मनःपूर्वक बाळगलेला कृतज्ञततेचा भाव हा ‘तीन ओळींचा पक्षादेश’ (three-line whip) म्हणजे मन-संसदेतील निर्विवाद बहुमताची खात्री.
+      </p>
+
+      <p>
+        <span class="italic">In a parliamentary democracy, ignoring party’s “three-line whip” invites serious consequences;</span> तद्वत, हा मन-संसदीय पक्षाचा ‘तीन सवयींचा व्हीप’ न मानण्याचे काय दुष्परिणाम होऊ शकतात याचा साधक-बाधक विचार ज्याने त्याने करून स्वहितासाठी ऊर्जा-विनियोग विधेयकावर मतदान करायचे असते.
+      </p>
+
+      <div class="centered-divider pt-2 pb-1 text-lg sm:text-xl" aria-hidden="true">⏣⏣⏣</div>
+
+      <div class="text-center italic text-base sm:text-lg tracking-wider text-slate-700 dark:text-slate-300">
+        २०२५०६११
+      </div>
+
+      <div class="centered-divider pt-1 text-lg sm:text-xl" aria-hidden="true">⏣</div>
+
+    </article>
+
+    <!-- Share Button at Bottom -->
+    <div class="mt-9 sm:mt-11 flex justify-center">
+      <button
+        id="share-btn"
+        type="button"
+        aria-label="Share"
+        class="group inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-slate-950 font-medium text-sm sm:text-base shadow-md hover:shadow-lg active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+      >
+        <!-- Share Icon -->
+        <svg id="share-icon" class="w-5 h-5 transition-transform duration-200 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+        </svg>
+        <!-- Check Icon (for copy feedback) -->
+        <svg id="check-icon" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        <span id="share-btn-text">Share</span>
+      </button>
+    </div>
+
+  </main>
+
+  <script>
+    (function () {
+      const htmlEl = document.documentElement;
+      const themeToggleBtn = document.getElementById('theme-toggle');
+
+      // Default to Light Mode unless user explicitly saved 'dark'
+      try {
+        const savedTheme = localStorage.getItem('theme-preference');
+        if (savedTheme === 'dark') {
+          htmlEl.classList.remove('light');
+          htmlEl.classList.add('dark');
+        } else {
+          htmlEl.classList.remove('dark');
+          htmlEl.classList.add('light');
+        }
+      } catch (e) {
+        htmlEl.classList.add('light');
+      }
+
+      themeToggleBtn.addEventListener('click', () => {
+        const isDark = htmlEl.classList.contains('dark');
+        if (isDark) {
+          htmlEl.classList.remove('dark');
+          htmlEl.classList.add('light');
+          try { localStorage.setItem('theme-preference', 'light'); } catch (e) {}
+        } else {
+          htmlEl.classList.remove('light');
+          htmlEl.classList.add('dark');
+          try { localStorage.setItem('theme-preference', 'dark'); } catch (e) {}
+        }
+      });
+
+      // Share Button Functionality (Web Share API with Clipboard Fallback)
+      const shareBtn = document.getElementById('share-btn');
+      const shareIcon = document.getElementById('share-icon');
+      const checkIcon = document.getElementById('check-icon');
+      const shareBtnText = document.getElementById('share-btn-text');
+
+      function copyFallback(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand('copy');
+        } catch (err) {}
+        document.body.removeChild(textArea);
+      }
+
+      function showCopiedFeedback() {
+        shareIcon.classList.add('hidden');
+        checkIcon.classList.remove('hidden');
+        shareBtnText.textContent = 'Copied';
+        setTimeout(() => {
+          checkIcon.classList.add('hidden');
+          shareIcon.classList.remove('hidden');
+          shareBtnText.textContent = 'Share';
+        }, 2200);
+      }
+
+      shareBtn.addEventListener('click', async () => {
+        const shareData = {
+          title: 'कन्सॉलिडेटेड फंड..',
+          text: 'कन्सॉलिडेटेड फंड..',
+          url: window.location.href,
+        };
+
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+          } catch (err) {
+            if (err.name !== 'AbortError') {
+              copyFallback(window.location.href);
+              showCopiedFeedback();
+            }
+          }
+        } else {
+          copyFallback(window.location.href);
+          showCopiedFeedback();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
